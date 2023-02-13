@@ -30,12 +30,14 @@ class FRCNN(object):
         #   验证集损失较低不代表mAP较高，仅代表该权值在验证集上泛化性能较好。
         #   如果出现shape不匹配，同时要注意训练时的model_path和classes_path参数的修改
         #--------------------------------------------------------------------------#
-        "model_path"    : 'model_data/voc_weights_resnet.pth',
-        "classes_path"  : 'model_data/voc_classes.txt',
+        # "model_path"    : 'model_data/voc_weights_resnet.pth',
+        # "classes_path"  : 'model_data/voc_classes.txt',
+        "model_path"    : 'logs/ep150-loss0.518-val_loss0.485.pth',
+        "classes_path"  : 'webgen/output/cls.txt',
         #---------------------------------------------------------------------#
         #   网络的主干特征提取网络，resnet50或者vgg
         #---------------------------------------------------------------------#
-        "backbone"      : "resnet50",
+        "backbone"      : "vgg",
         #---------------------------------------------------------------------#
         #   只有得分大于置信度的预测框会被保留下来
         #---------------------------------------------------------------------#
@@ -223,6 +225,7 @@ class FRCNN(object):
                 draw.rectangle([left + i, top + i, right - i, bottom - i], outline=self.colors[c])
             draw.rectangle([tuple(text_origin), tuple(text_origin + label_size)], fill=self.colors[c])
             draw.text(text_origin, str(label,'UTF-8'), fill=(0, 0, 0), font=font)
+            print(top, left, bottom, right, label)
             del draw
 
         return image

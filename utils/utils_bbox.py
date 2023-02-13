@@ -123,6 +123,7 @@ class DecodeBox():
                     results[-1].extend(c_pred)
 
             if len(results[-1]) > 0:
+                # 调整到原图上的 形状
                 results[-1] = np.array(results[-1])
                 box_xy, box_wh = (results[-1][:, 0:2] + results[-1][:, 2:4])/2, results[-1][:, 2:4] - results[-1][:, 0:2]
                 results[-1][:, :4] = self.frcnn_correct_boxes(box_xy, box_wh, input_shape, image_shape)

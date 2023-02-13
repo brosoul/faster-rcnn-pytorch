@@ -9,15 +9,15 @@ import numpy as np
 from PIL import Image
 from datetime import datetime
 
-from frcnn import FRCNN
+from frcnn_improve import FRCNN
 
 if __name__ == "__main__":
-    # backbone = "resnet"
-    # model_path = 'logs/resnet50_frcnn/ep250-loss0.454-val_loss0.440.pth'
+    backbone = "resnet50"
+    model_path = 'logs/best_epoch_weights.pth'
     # classes_path = 'webgen/output/cls.txt'
     
-    backbone = "vgg"
-    model_path = 'logs/ep150-loss0.518-val_loss0.485.pth'
+    # backbone = "vgg"
+    # model_path = 'logs/ep150-loss0.518-val_loss0.485.pth'
     classes_path = 'webgen/output/cls.txt'
     cuda = False
     frcnn = FRCNN(backbone=backbone, model_path=model_path, classes_path=classes_path, cuda=cuda)
@@ -83,6 +83,8 @@ if __name__ == "__main__":
             if img_desc == "" or img_desc is None:
                 continue
             img = img_desc.split()[0]
+            anchors = np.array([np.array(list(map(int,box.split(',')))) for box in img_desc.split()[1:]])
+
             start = datetime.now()
             try:
                 image = Image.open(img)
@@ -90,7 +92,7 @@ if __name__ == "__main__":
                 print('Open Error! Try again!')
                 continue
             else:
-                r_image = frcnn.detect_image(image, crop = crop, count = count)
+                r_image = frcnn.detect_image(image, anchors, crop = crop, count = count)
                 end = datetime.now()
                 print(f"predict cost {end - start}")
                 # r_image.show()
